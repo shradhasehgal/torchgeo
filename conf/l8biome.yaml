@@ -10,7 +10,7 @@ experiment:
     loss: "ce"
     model: "unet"
     backbone: "resnet18"
-    weights: null
+    weights: "imagenet"
     learning_rate: 1e-3
     learning_rate_schedule_patience: 6
     verbose: false
@@ -19,6 +19,6 @@ experiment:
     num_filters: 256
     ignore_index: null
   datamodule:
-    root: "data/l8biome"
+    root: "/projects/dali/data/l8biome"
     batch_size: 32
     num_workers: 4
