@@ -330,8 +330,10 @@ class RasterDataset(GeoDataset):
         i = 0
         pathname = os.path.join(root, "**", self.filename_glob)
         filename_regex = re.compile(self.filename_regex, re.VERBOSE)
+        print(pathname, filename_regex)
         for filepath in glob.iglob(pathname, recursive=True):
             match = re.match(filename_regex, os.path.basename(filepath))
+            print(filepath)
             if match is not None:
                 try:
                     with rasterio.open(filepath) as src:

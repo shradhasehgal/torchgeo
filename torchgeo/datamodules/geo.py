@@ -124,6 +124,7 @@ class GeoDataModule(LightningDataModule):  # type: ignore[misc]
             self.train_dataset = self.dataset_class(  # type: ignore[call-arg]
                 split="train", **self.kwargs
             )
+            breakpoint()
             self.train_batch_sampler = RandomBatchGeoSampler(
                 self.train_dataset, self.patch_size, self.batch_size, self.length
             )

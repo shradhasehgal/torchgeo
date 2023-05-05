@@ -174,6 +174,7 @@ def main(conf: DictConfig) -> None:
         task_class, datamodule_class = TASK_TO_MODULES_MAPPING[task_name]
         task = task_class(**task_args)
         datamodule = datamodule_class(**datamodule_args)
+        print(datamodule)
     else:
         raise ValueError(
             f"experiment.task={task_name} is not recognized as a valid task"
