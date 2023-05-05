@@ -37,6 +37,7 @@ from .etci2021 import ETCI2021
 from .eudem import EUDEM
 from .eurosat import EuroSAT, EuroSAT100
 from .fair1m import FAIR1M
+from .fire_risk import FireRisk
 from .forestdamage import ForestDamage
 from .gbif import GBIF
 from .geo import (
@@ -74,6 +75,7 @@ from .loveda import LoveDA
 from .millionaid import MillionAID
 from .naip import NAIP
 from .nasa_marine_debris import NASAMarineDebris
+from .nlcd import NLCD
 from .openbuildings import OpenBuildings
 from .oscd import OSCD
 from .patternnet import PatternNet
@@ -83,6 +85,7 @@ from .resisc45 import RESISC45
 from .seco import SeasonalContrastS2
 from .sen12ms import SEN12MS
 from .sentinel import Sentinel, Sentinel1, Sentinel2
+from .skippd import SKIPPD
 from .so2sat import So2Sat
 from .spacenet import (
     SpaceNet,
@@ -102,6 +105,7 @@ from .splits import (
     time_series_split,
 )
 from .ssl4eo import SSL4EOS12
+from .sustainbench_crop_yield import SustainBenchCropYield
 from .ucmerced import UCMerced
 from .usavars import USAVars
 from .utils import (
@@ -113,6 +117,7 @@ from .utils import (
 )
 from .vaihingen import Vaihingen2D
 from .vhr10 import VHR10
+from .western_usa_live_fuel_moisture import WesternUSALiveFuelMoisture
 from .xview import XView2
 from .zuericrop import ZueriCrop
 
@@ -156,6 +161,7 @@ __all__ = (
     "Landsat8",
     "Landsat9",
     "NAIP",
+    "NLCD",
     "OpenBuildings",
     "Sentinel",
     "Sentinel1",
@@ -176,6 +182,7 @@ __all__ = (
     "EuroSAT",
     "EuroSAT100",
     "FAIR1M",
+    "FireRisk",
     "ForestDamage",
     "GID15",
     "IDTReeS",
@@ -192,6 +199,7 @@ __all__ = (
     "ReforesTree",
     "SeasonalContrastS2",
     "SEN12MS",
+    "SKIPPD",
     "So2Sat",
     "SpaceNet",
     "SpaceNet1",
@@ -202,11 +210,13 @@ __all__ = (
     "SpaceNet6",
     "SpaceNet7",
     "SSL4EOS12",
+    "SustainBenchCropYield",
     "TropicalCyclone",
     "UCMerced",
     "USAVars",
     "Vaihingen2D",
     "VHR10",
+    "WesternUSALiveFuelMoisture",
     "XView2",
     "ZueriCrop",
     # Base classes

@@ -296,6 +296,20 @@ class RasterDataset(GeoDataset):
     #: Color map for the dataset, used for plotting
     cmap: dict[int, tuple[int, int, int, int]] = {}
 
+    @property
+    def dtype(self) -> torch.dtype:
+        """The dtype of the dataset (overrides the dtype of the data file via a cast).
+
+        Returns:
+            the dtype of the dataset
+
+        .. versionadded:: 5.0
+        """
+        if self.is_image:
+            return torch.float32
+        else:
+            return torch.long
+
     def __init__(
         self,
         root: str = "data",
@@ -431,10 +445,12 @@ class RasterDataset(GeoDataset):
             data = self._merge_files(filepaths, query, self.band_indexes)
 
         sample = {"crs": self.crs, "bbox": query}
+
+        data = data.to(self.dtype)
         if self.is_image:
-            sample["image"] = data.float()
+            sample["image"] = data
         else:
-            sample["mask"] = data.long()
+            sample["mask"] = data
 
         if self.transforms is not None:
             sample = self.transforms(sample)
@@ -738,6 +754,7 @@ class NonGeoClassificationDataset(NonGeoDataset, ImageFolder):  # type: ignore[m
 
         Args:
             index: index to return
+
         Returns:
             data and label at that index
         """
@@ -758,13 +775,13 @@ class NonGeoClassificationDataset(NonGeoDataset, ImageFolder):  # type: ignore[m
         return len(self.imgs)
 
     def _load_image(self, index: int) -> tuple[Tensor, Tensor]:
-        """Load a single image and it's class label.
+        """Load a single image and its class label.
 
         Args:
             index: index to return
+
         Returns:
-            the image
-            the image class label
+            the image and class label
         """
         img, label = ImageFolder.__getitem__(self, index)
         array: "np.typing.NDArray[np.int_]" = np.array(img)
