@@ -3,7 +3,7 @@
 
 """Base classes for all :mod:`torchgeo` data modules."""
 
-from typing import Any, Callable, Dict, Optional, Tuple, Type, Union
+from typing import Any, Callable, Optional, Union
 
 import kornia.augmentation as K
 import matplotlib.pyplot as plt
@@ -34,9 +34,9 @@ class GeoDataModule(LightningDataModule):  # type: ignore[misc]
 
     def __init__(
         self,
-        dataset_class: Type[GeoDataset],
+        dataset_class: type[GeoDataset],
         batch_size: int = 1,
-        patch_size: Union[int, Tuple[int, int]] = 64,
+        patch_size: Union[int, tuple[int, int]] = 64,
         length: int = 1000,
         num_workers: int = 0,
         **kwargs: Any,
@@ -61,11 +61,11 @@ class GeoDataModule(LightningDataModule):  # type: ignore[misc]
         self.kwargs = kwargs
 
         # Datasets
-        self.dataset: Optional[Dataset[Dict[str, Tensor]]] = None
-        self.train_dataset: Optional[Dataset[Dict[str, Tensor]]] = None
-        self.val_dataset: Optional[Dataset[Dict[str, Tensor]]] = None
-        self.test_dataset: Optional[Dataset[Dict[str, Tensor]]] = None
-        self.predict_dataset: Optional[Dataset[Dict[str, Tensor]]] = None
+        self.dataset: Optional[Dataset[dict[str, Tensor]]] = None
+        self.train_dataset: Optional[Dataset[dict[str, Tensor]]] = None
+        self.val_dataset: Optional[Dataset[dict[str, Tensor]]] = None
+        self.test_dataset: Optional[Dataset[dict[str, Tensor]]] = None
+        self.predict_dataset: Optional[Dataset[dict[str, Tensor]]] = None
 
         # Samplers
         self.sampler: Optional[GeoSampler] = None
@@ -91,7 +91,7 @@ class GeoDataModule(LightningDataModule):  # type: ignore[misc]
         self.collate_fn = stack_samples
 
         # Data augmentation
-        Transform = Callable[[Dict[str, Tensor]], Dict[str, Tensor]]
+        Transform = Callable[[dict[str, Tensor]], dict[str, Tensor]]
         self.aug: Transform = AugmentationSequential(
             K.Normalize(mean=self.mean, std=self.std), data_keys=["image"]
         )
@@ -143,7 +143,7 @@ class GeoDataModule(LightningDataModule):  # type: ignore[misc]
                 self.test_dataset, self.patch_size, self.patch_size
             )
 
-    def train_dataloader(self) -> DataLoader[Dict[str, Tensor]]:
+    def train_dataloader(self) -> DataLoader[dict[str, Tensor]]:
         """Implement one or more PyTorch DataLoaders for training.
 
         Returns:
@@ -173,7 +173,7 @@ class GeoDataModule(LightningDataModule):  # type: ignore[misc]
             msg = f"{self.__class__.__name__}.setup does not define a 'train_dataset'"
             raise MisconfigurationException(msg)
 
-    def val_dataloader(self) -> DataLoader[Dict[str, Tensor]]:
+    def val_dataloader(self) -> DataLoader[dict[str, Tensor]]:
         """Implement one or more PyTorch DataLoaders for validation.
 
         Returns:
@@ -203,7 +203,7 @@ class GeoDataModule(LightningDataModule):  # type: ignore[misc]
             msg = f"{self.__class__.__name__}.setup does not define a 'val_dataset'"
             raise MisconfigurationException(msg)
 
-    def test_dataloader(self) -> DataLoader[Dict[str, Tensor]]:
+    def test_dataloader(self) -> DataLoader[dict[str, Tensor]]:
         """Implement one or more PyTorch DataLoaders for testing.
 
         Returns:
@@ -233,7 +233,7 @@ class GeoDataModule(LightningDataModule):  # type: ignore[misc]
             msg = f"{self.__class__.__name__}.setup does not define a 'test_dataset'"
             raise MisconfigurationException(msg)
 
-    def predict_dataloader(self) -> DataLoader[Dict[str, Tensor]]:
+    def predict_dataloader(self) -> DataLoader[dict[str, Tensor]]:
         """Implement one or more PyTorch DataLoaders for prediction.
 
         Returns:
@@ -264,8 +264,8 @@ class GeoDataModule(LightningDataModule):  # type: ignore[misc]
             raise MisconfigurationException(msg)
 
     def transfer_batch_to_device(
-        self, batch: Dict[str, Tensor], device: torch.device, dataloader_idx: int
-    ) -> Dict[str, Tensor]:
+        self, batch: dict[str, Tensor], device: torch.device, dataloader_idx: int
+    ) -> dict[str, Tensor]:
         """Transfer batch to device.
 
         Defines how custom data types are moved to the target device.
@@ -286,8 +286,8 @@ class GeoDataModule(LightningDataModule):  # type: ignore[misc]
         return batch
 
     def on_after_batch_transfer(
-        self, batch: Dict[str, Tensor], dataloader_idx: int
-    ) -> Dict[str, Tensor]:
+        self, batch: dict[str, Tensor], dataloader_idx: int
+    ) -> dict[str, Tensor]:
         """Apply batch augmentations to the batch after it is transferred to the device.
 
         Args:
@@ -341,7 +341,7 @@ class NonGeoDataModule(LightningDataModule):  # type: ignore[misc]
 
     def __init__(
         self,
-        dataset_class: Type[NonGeoDataset],
+        dataset_class: type[NonGeoDataset],
         batch_size: int = 1,
         num_workers: int = 0,
         **kwargs: Any,
@@ -362,11 +362,11 @@ class NonGeoDataModule(LightningDataModule):  # type: ignore[misc]
         self.kwargs = kwargs
 
         # Datasets
-        self.dataset: Optional[Dataset[Dict[str, Tensor]]] = None
-        self.train_dataset: Optional[Dataset[Dict[str, Tensor]]] = None
-        self.val_dataset: Optional[Dataset[Dict[str, Tensor]]] = None
-        self.test_dataset: Optional[Dataset[Dict[str, Tensor]]] = None
-        self.predict_dataset: Optional[Dataset[Dict[str, Tensor]]] = None
+        self.dataset: Optional[Dataset[dict[str, Tensor]]] = None
+        self.train_dataset: Optional[Dataset[dict[str, Tensor]]] = None
+        self.val_dataset: Optional[Dataset[dict[str, Tensor]]] = None
+        self.test_dataset: Optional[Dataset[dict[str, Tensor]]] = None
+        self.predict_dataset: Optional[Dataset[dict[str, Tensor]]] = None
 
         # Data loaders
         self.train_batch_size: Optional[int] = None
@@ -378,7 +378,7 @@ class NonGeoDataModule(LightningDataModule):  # type: ignore[misc]
         self.collate_fn = default_collate
 
         # Data augmentation
-        Transform = Callable[[Dict[str, Tensor]], Dict[str, Tensor]]
+        Transform = Callable[[dict[str, Tensor]], dict[str, Tensor]]
         self.aug: Transform = AugmentationSequential(
             K.Normalize(mean=self.mean, std=self.std), data_keys=["image"]
         )
@@ -420,7 +420,7 @@ class NonGeoDataModule(LightningDataModule):  # type: ignore[misc]
                 split="test", **self.kwargs
             )
 
-    def train_dataloader(self) -> DataLoader[Dict[str, Tensor]]:
+    def train_dataloader(self) -> DataLoader[dict[str, Tensor]]:
         """Implement one or more PyTorch DataLoaders for training.
 
         Returns:
@@ -443,7 +443,7 @@ class NonGeoDataModule(LightningDataModule):  # type: ignore[misc]
             msg = f"{self.__class__.__name__}.setup does not define a 'train_dataset'"
             raise MisconfigurationException(msg)
 
-    def val_dataloader(self) -> DataLoader[Dict[str, Tensor]]:
+    def val_dataloader(self) -> DataLoader[dict[str, Tensor]]:
         """Implement one or more PyTorch DataLoaders for validation.
 
         Returns:
@@ -466,7 +466,7 @@ class NonGeoDataModule(LightningDataModule):  # type: ignore[misc]
             msg = f"{self.__class__.__name__}.setup does not define a 'val_dataset'"
             raise MisconfigurationException(msg)
 
-    def test_dataloader(self) -> DataLoader[Dict[str, Tensor]]:
+    def test_dataloader(self) -> DataLoader[dict[str, Tensor]]:
         """Implement one or more PyTorch DataLoaders for testing.
 
         Returns:
@@ -489,7 +489,7 @@ class NonGeoDataModule(LightningDataModule):  # type: ignore[misc]
             msg = f"{self.__class__.__name__}.setup does not define a 'test_dataset'"
             raise MisconfigurationException(msg)
 
-    def predict_dataloader(self) -> DataLoader[Dict[str, Tensor]]:
+    def predict_dataloader(self) -> DataLoader[dict[str, Tensor]]:
         """Implement one or more PyTorch DataLoaders for prediction.
 
         Returns:
@@ -513,8 +513,8 @@ class NonGeoDataModule(LightningDataModule):  # type: ignore[misc]
             raise MisconfigurationException(msg)
 
     def on_after_batch_transfer(
-        self, batch: Dict[str, Tensor], dataloader_idx: int
-    ) -> Dict[str, Tensor]:
+        self, batch: dict[str, Tensor], dataloader_idx: int
+    ) -> dict[str, Tensor]:
         """Apply batch augmentations to the batch after it is transferred to the device.
 
         Args:
