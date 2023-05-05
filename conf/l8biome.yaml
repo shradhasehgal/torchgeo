@@ -1,7 +1,7 @@
 trainer:
   accelerator: gpu
   devices: 1
-  min_epochs: 20
+  min_epochs: 30
   max_epochs: 100
   benchmark: True
 experiment:
