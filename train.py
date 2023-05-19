@@ -15,6 +15,64 @@ from lightning.pytorch.callbacks import EarlyStopping, ModelCheckpoint
 from lightning.pytorch.loggers import CSVLogger, TensorBoardLogger
 from omegaconf import DictConfig, OmegaConf
 
+from torchgeo.datamodules import (
+    BigEarthNetDataModule,
+    ChesapeakeCVPRDataModule,
+    COWCCountingDataModule,
+    DeepGlobeLandCoverDataModule,
+    ETCI2021DataModule,
+    EuroSATDataModule,
+    GID15DataModule,
+    InriaAerialImageLabelingDataModule,
+    L8BiomeDataModule,
+    LandCoverAIDataModule,
+    LoveDADataModule,
+    NAIPChesapeakeDataModule,
+    NASAMarineDebrisDataModule,
+    Potsdam2DDataModule,
+    RESISC45DataModule,
+    SEN12MSDataModule,
+    So2SatDataModule,
+    SpaceNet1DataModule,
+    TropicalCycloneDataModule,
+    UCMercedDataModule,
+    Vaihingen2DDataModule,
+)
+from torchgeo.trainers import (
+    BYOLTask,
+    ClassificationTask,
+    MultiLabelClassificationTask,
+    ObjectDetectionTask,
+    RegressionTask,
+    SemanticSegmentationTask,
+)
+
+TASK_TO_MODULES_MAPPING: dict[
+    str, tuple[type[LightningModule], type[LightningDataModule]]
+] = {
+    "bigearthnet": (MultiLabelClassificationTask, BigEarthNetDataModule),
+    "byol": (BYOLTask, ChesapeakeCVPRDataModule),
+    "chesapeake_cvpr": (SemanticSegmentationTask, ChesapeakeCVPRDataModule),
+    "cowc_counting": (RegressionTask, COWCCountingDataModule),
+    "cyclone": (RegressionTask, TropicalCycloneDataModule),
+    "deepglobelandcover": (SemanticSegmentationTask, DeepGlobeLandCoverDataModule),
+    "eurosat": (ClassificationTask, EuroSATDataModule),
+    "etci2021": (SemanticSegmentationTask, ETCI2021DataModule),
+    "gid15": (SemanticSegmentationTask, GID15DataModule),
+    "inria": (SemanticSegmentationTask, InriaAerialImageLabelingDataModule),
+    "l8biome": (SemanticSegmentationTask, L8BiomeDataModule),
+    "landcoverai": (SemanticSegmentationTask, LandCoverAIDataModule),
+    "loveda": (SemanticSegmentationTask, LoveDADataModule),
+    "naipchesapeake": (SemanticSegmentationTask, NAIPChesapeakeDataModule),
+    "nasa_marine_debris": (ObjectDetectionTask, NASAMarineDebrisDataModule),
+    "potsdam2d": (SemanticSegmentationTask, Potsdam2DDataModule),
+    "resisc45": (ClassificationTask, RESISC45DataModule),
+    "sen12ms": (SemanticSegmentationTask, SEN12MSDataModule),
+    "so2sat": (ClassificationTask, So2SatDataModule),
+    "spacenet1": (SemanticSegmentationTask, SpaceNet1DataModule),
+    "ucmerced": (ClassificationTask, UCMercedDataModule),
+    "vaihingen2d": (SemanticSegmentationTask, Vaihingen2DDataModule),
+}
 from torchgeo.datamodules import MisconfigurationException
 from torchgeo.trainers import BYOLTask, MoCoTask, ObjectDetectionTask, SimCLRTask
 
@@ -88,7 +146,6 @@ def main(conf: DictConfig) -> None:
     datamodule: LightningDataModule = instantiate(conf.datamodule)
     task: LightningModule = instantiate(conf.module)
 
-    # Define callbacks
     tb_logger = TensorBoardLogger(conf.program.log_dir, name=experiment_name)
     csv_logger = CSVLogger(conf.program.log_dir, name=experiment_name)
 

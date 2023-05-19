@@ -214,7 +214,8 @@ class SemanticSegmentationTask(LightningModule):  # type: ignore[misc]
         y = batch["mask"]
         y_hat = self(x)
         y_hat_hard = y_hat.argmax(dim=1)
-
+        
+        print(x.shape)
         loss = self.loss(y_hat, y)
 
         # by default, the train step logs every `log_every_n_steps` steps where
